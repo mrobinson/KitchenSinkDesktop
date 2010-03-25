@@ -1,0 +1,125 @@
+<div class="module" name="Basics">
+<div class="section" name="The Titanium Object">
+	<p>
+	The Titanium object is top-level namespace for the entire Titanium API. It
+	is an object shared between all JavaScript contexts. Each frame, including
+	the top-level frame of each window, has its own JavaScript context. This
+	makes sharing data between frames a snap:
+	</p>
+	<pre class="api_code"><code>
+		Titanium.DataDump = {}
+		Titanium.DataDump.value = "foo";
+		alert(Titanium.DataDump.value);
+	</code></pre>
+
+	<div class="note">
+	Note: Since it's simple to write to the Titanium object, you should be careful
+	not to overwrite Titanium namespaces and methods, unless you know what you're
+	doing.
+	</div>
+
+	<p>
+	Almost all instantiated objects in Titanium are accessor-objects. This means
+	that properties can be accessed and modified in two styles. For example, take
+	this use use of <tt>API.Application.getName()</tt>:
+	<pre class="api_code"><code>
+		alert(Titanium.API.getApplication().getName());
+		alert(Titanium.API.getApplication().name);
+		alert(Titanium.API.application.name);
+	</code></pre>
+	Likewise a similar method can be used for modifiers:
+	<pre class="api_code"><code>
+		Titanium.UI.currentWindow.setTitle("Title1");
+		Titanium.UI.currentWindow.title = "Title2";
+	</code></pre>
+	</p>
+</div>
+<div class="section" name="Logging">
+	<p>
+	Titanium provides an API for logging.  There are two supported methods.
+	</p>
+
+	<pre class="api_code"><code>
+		Titanium.API.critical("critical message");
+		Titanium.API.debug("debug message");
+		Titanium.API.error("error message");
+		Titanium.API.fatal("fatal message");
+		Titanium.API.notice("notice message");
+		Titanium.API.trace("trace message");
+		Titanium.API.warn("warning message");
+	</code></pre>
+
+	<pre class="api_code"><code>
+		Titanium.API.log(Titanium.API.CRITICAL,"critical message");
+		Titanium.API.log(Titanium.API.DEBUG,"debug message");
+		Titanium.API.log(Titanium.API.ERROR,"error message");
+		Titanium.API.log(Titanium.API.FATAL,"fatal message");
+		Titanium.API.log(Titanium.API.INFO,"info message");
+		Titanium.API.log(Titanium.API.NOTICE,"notice message");
+		Titanium.API.log(Titanium.API.TRACE,"trace message");
+		Titanium.API.log(Titanium.API.WARN,"warn message");
+	</code></pre>
+
+	<div class="note"><p>
+	Note: You can view the log output via the web inspector (or
+	a terminal window if you launched your app from the command line).
+	The Web Inspector only logs WARN messages or higher.
+	</p></div>
+
+	<div>
+	If you want to control the level of logging that is displayed via stdout,
+	you can set the logging level.
+	</div>
+
+	<pre class="api_code"><code>
+		alert("The current log level is: " + Titanium.API.getLogLevel());
+		Titanium.API.setLogLevel(Titanium.API.FATAL);
+		alert("The current log level is: " + Titanium.API.getLogLevel());
+	</code></pre>
+</div>
+
+<div class="section" name="Environment Variables">
+	<p>
+	Titanium allows you to access environment variables via the
+	<tt>Titanium.API.getEnvironment</tt> function. The object returned
+	by this function is live representation of all environment variables,
+	which allows you to query and update the environment easily.
+	</p>
+
+	<pre class="api_code"><code>
+		var env = Titanium.API.getEnvironment();
+		alert(env['PATH']);
+		
+		// Modify the PATH environment variable.
+		var sep = Titanium.platform == "win32" ? ";" : ":";
+		env['PATH'] = env['PATH'] + sep + "/home/titanium/bin";
+		alert(env['PATH']);
+	</code></pre>
+</div>
+
+<div class="section" name="Events">
+	<p>
+	Many objects in Titanium can fire and handle events. Sometimes you
+	may need to inercept all events after they've bubbled up to the
+	top-level object. This is possible by installing an event handler
+	on the Titanium object.
+	</p>
+
+	<pre class="api_code"><code>
+		Titanium.API.addEventListener("CustomEvent", function(event)
+		{
+			alert("Top-level got " + event.type + " event!");
+		});
+		Titanium.API.fireEvent("CustomEvent");
+	</code></pre>
+
+	<p>
+	Not only will <tt>Titanium.API.addEventListener</tt> listen for events
+	fired with <tt>Titanium.API.fireEvent</tt>, but it will also listen for
+	events originating from <em>all</em> Titanium objects (unless
+	<tt>preventDefault</tt> or <tt>stopPropagation</tt> was called on that
+	event).
+	</p>
+</div>
+
+</div>

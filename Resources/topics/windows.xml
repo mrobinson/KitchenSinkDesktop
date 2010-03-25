@@ -1,0 +1,148 @@
+<div class="module" name="Windows">
+<div class="section" name="The Current Window">
+	<p>
+	All Titanium windows are 
+	<a href="https://developer.appcelerator.com/apidoc/desktop/1.0/Titanium.UI.UserWindow" target="ti:systembrowser"><tt>UI.UserWindow</tt></a>
+	objects. Code running in context of an HTML page can easily access the
+	current window:
+	<pre class="api_code"><code>
+		alert(Titanium.UI.currentWindow);
+	</code></pre>
+
+	From there it is easy to modify the window at will:
+	<pre class="api_code"><code>
+		Titanium.UI.currentWindow.setTitle(prompt("New window title:"));
+	</code></pre>
+
+	All Titanium applications have an initial window, which can be set up
+	in the <tt>tiapp.xml</tt> file (check out KitchenSink's <tt>tiapp.xml</tt>
+	file or the <a href="https://developer.appcelerator.com/doc/desktop/tiapp.xml" target="ti:systembrowser">guide</a>.
+	Once a window has been opened, it can be closed once, freeing its resources
+	and can never be opened again. If you'd just like to hide a window, try the
+	following:
+	<pre class="api_code"><code>
+		Titanium.UI.currentWindow.hide();
+		setTimeout(function()
+		{
+			Titanium.UI.currentWindow.show();
+		}, 3000);
+	</code></pre>
+	</p>
+</div>
+
+<div class="section" name="Modifying Windows">
+	<p>
+	Most window properties can be changed:
+	</p>
+
+	<pre class="api_code"><code>
+		Titanium.UI.currentWindow.setFullscreen(
+			!Titanium.UI.currentWindow.isFullscreen());
+	</code></pre>
+
+	<pre class="api_code"><code>
+		var newWidth = parseInt(prompt("New window width:"));
+
+		// Keep KitchenSink functional.
+		if (!isNaN(newWidth) &amp;&amp; newWidth > 300)
+			Titanium.UI.currentWindow.setWidth(newWidth);
+	</code></pre>
+
+	<pre class="api_code"><code>
+		var newHeight = parseInt(prompt("New window height:"));
+
+		// Keep KitchenSink functional.
+		if (!isNaN(newHeight) &amp;&amp; newHeight > 300)
+			Titanium.UI.currentWindow.setHeight(newHeight);
+	</code></pre>
+
+	<pre class="api_code"><code>
+		// Modify the bounds of the window all at once
+		var bounds = Titanium.UI.currentWindow.bounds;
+		console.log("Previous bounds: " +
+			" x: " + bounds.x +
+			" y: " + bounds.y +
+			" width: " + bounds.width +
+			" height: " + bounds.height);
+
+		bounds.width = 900;
+		Titanium.UI.currentWindow.setBounds(bounds);
+	</code></pre>
+
+	<p>
+	Some properties can only be changed before a window is originally open though.
+	In particular, a window may only change its use of chrome before it is opened.
+
+	<pre class="api_code"><code>
+		// Should have no effect.
+		Titanium.UI.currentWindow.setUsingChrome(false);
+
+		// This should work.
+		var w = Titanium.UI.createWindow("app://new_window.html");
+		w.setUsingChrome(false);
+		w.open();
+	</code></pre>
+	</p>
+</div>
+
+<div class="section" name="Transparent Windows">
+	<p>
+	There are two types of transparency in Titanium. Full window transparency
+	specified with the transparency property and background transparency specified
+	with the transparent-background property.
+	</p>
+
+	<h4>The Transparency Setting</h4>
+	<p>
+	The transparent element should contain a value between 0.0 and 1.0 and
+	specifies the opacity of the total window. A window with a transparency
+	value of 0.7 would look like:
+	</p>
+
+	<pre class="api_code"><code>
+		var w = Titanium.UI.createWindow({
+			url: "app://new_window.html",
+			transparency: 0.85,
+			height: 200
+		});
+		w.open();
+	</code></pre>
+
+	<p>
+	The transparency setting of a window can be modified after it has been
+	opened. The following example will cause the new window to fade away when
+	closed:
+	</p>
+	<pre class="api_code"><code>
+		var w = Titanium.UI.createWindow({
+			url: "app://fading_window.html",
+			height: 200
+		});
+		w.open();
+	</code></pre>
+
+	<h4>The Transparenct Background Setting</h4>
+	<p>
+	The transparent-background property specifies that the WebView in a
+	window has a background which is transparent. Elements in the WebView
+	may specify different opacities to create non-rectangular windows. Here is
+	an example of a non-rectangular Titanium window with a
+	transparent-background value of true:
+	</p>
+
+	<pre class="api_code"><code>
+		var w = Titanium.UI.createWindow({
+			url: "app://new_window.html",
+			transparentBackground: true,
+			height: 200
+		});
+		w.open();
+	</code></pre>
+
+	<p>
+	Note that currently the transparent-background property disables all chrome
+	and overrides the transparency property. The transparent-background property
+	cannot be changed once a window is open.
+	</p>
+
+</div>

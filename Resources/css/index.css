@@ -1,0 +1,260 @@
+/********************************
+ * navigation scrollable
+ ********************************/
+#module_nav
+{
+	background-color:#fbfbfb;
+	-webkit-border-bottom-left-radius:10px;
+	-webkit-border-bottom-right-radius:10px;
+	border:1px solid #bababa;
+	border-top:1px solid #e8e8e8 !important;
+	border-top:none;
+	padding:10px;
+	width:100%;
+	margin:auto;
+}
+
+div.scrollable
+{
+	position:relative; 
+	overflow:hidden; 
+	height:25px;
+	width:600px; 
+	float:left;
+}
+
+div.scrollable div.items
+{
+	width:20000em;
+	position:absolute;
+}
+
+div.scrollable div.items div
+{
+	float:left; 
+}
+
+.api_scroller
+{
+	height:25px;
+	float:left;
+}
+
+#api_prev
+{
+	float:left;
+}
+
+#module_list div
+{
+	height:21px;
+	float:left;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	margin: 0px;
+	background-color:#ffffff;
+	border:1px solid #ccc;
+	cursor:pointer;
+	text-align:center;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+}
+
+#module_list div.active
+{
+	border:1px solid #000;
+}
+
+/********************************
+ * content styles
+ ********************************/
+body
+{
+	background-color:#f2f2f2;
+	padding:0px;
+	margin:0px;
+	font-family:'Myriad Pro','Helvetica Neue', 'Arial';
+	color:#000;
+	-webkit-user-select:none;
+	overflow:hidden;
+}
+.note
+{
+	font-size:14px;
+	font-weight:normal;
+	font-style:italic;
+	color:#777;
+}
+#header_border
+{
+	border-top:1px solid #444444;
+	margin-bottom:10px;
+}
+#content
+{
+	background-color:#fff;
+	border:1px solid #d6d6d6;
+	-webkit-border-radius:10px;
+	height:92%;
+	padding-top:10px;
+	padding-bottom:10px;
+	padding-left:5px;
+	padding-right:5px;
+	margin-left:10px;
+	margin-right:10px;
+}
+#content_heading
+{
+	border-bottom:1px solid #eee;
+}
+#api_heading
+{
+	font-size:20px;
+}
+#api_location
+{
+	color:#aaa;
+	font-size:14px;
+	font-weight:normal;
+	margin-left:10px;
+}
+#api_content
+{
+	padding: 0px;
+	padding-left: 20px;
+	padding-right: 20px;
+	margin: 0px;
+	color: #666;
+	font-weight: normal;
+	font-size: 14px;
+	font-family: 'Helvetica';
+}
+
+#api_content code
+{
+	font-size:14px !important;
+	line-height:15px !important;
+}
+#api_content h3
+{
+	font-size:22px;
+	font-weight:bold;
+}
+#api_list
+{
+	border-right: 1px solid #bababa;
+	margin-top:10px;
+	padding-right: 20px;
+}
+
+.topic_list
+{
+	color:#9f9696;
+	font-size:14px;
+	cursor:pointer;
+	height:22px;
+	line-height:24px;
+	margin-bottom:6px;
+	padding-left:7px;
+	width:150px;
+}
+.topic_list.active
+{
+	background-color:#3581d4;
+	color:#ffffff;
+	-webkit-box-shadow: #999 0px 2px 5px;
+}
+
+.section_item
+{
+	color:#9f9696;
+	font-size:12px;
+	cursor:pointer;
+	height:20px;
+	line-height:20px;
+	margin-bottom:6px;
+	padding-left:20px;
+	width:150px;
+}
+
+
+/********************************
+ * button styles
+ ********************************/
+button 
+{
+	-khtml-appearance: none;
+	-webkit-border-image: url(../images/button-bezel.png) 2 2 2 2 stretch stretch;
+	-webkit-transition: -webkit-box-shadow 0.2s linear;
+	background: none;
+	padding: 3px 8px;
+	color: #111;
+	text-shadow: 0px 1px 1px #fff;
+	font-weight: bold;
+	font-size:12px;
+	cursor:pointer;
+}
+
+button.default
+{
+	color: #1C4257;
+	-webkit-border-image: url(../images/default-button-bezel.png) 2 2 2 2 stretch stretch;
+}
+
+button:hover:not(:disabled) 
+{
+	-webkit-box-shadow: 0 0 7px #D4D4D4;
+}
+
+button.default:hover 
+{
+	-webkit-box-shadow: 0 0 7px #A1CAE2;
+}
+
+button:active:not(:disabled) 
+{
+	-webkit-border-image: url(../images/button-bezel-highlighted.png) 2 2 2 2 stretch stretch;
+}
+
+button.default:active 
+{
+	-webkit-border-image: url(../images/default-button-bezel-highlighted.png) 2 2 2 2 stretch stretch;
+}
+
+button:disabled 
+{
+	opacity: 0.5;
+}
+
+.scrolling
+{
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+::-webkit-scrollbar 
+{
+	width: 13px;
+	height: 13px;
+}
+
+::-webkit-scrollbar-thumb:vertical 
+{
+	height: 56px;
+	-webkit-border-image: url(../images/scroll_thumb.png) 8 0 8 0 stretch stretch;
+	border-width: 8 0 8 0;
+}
+
+::-webkit-scrollbar-thumb:horizontal 
+{
+	width: 56px;
+	-webkit-border-image: url(../images/scroll_thumb_horizontal.png) 0 8 0 8;
+	border-width: 0 8 0 8;
+}
+
+::-webkit-scrollbar-corner 
+{
+	display:none;
+}

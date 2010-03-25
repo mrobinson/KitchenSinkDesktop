@@ -1,0 +1,50 @@
+<html>
+<style>
+	html { background: transparent; }
+	body { background: transparent; opacity:0.8; }
+	#container { 
+		margin: 0 auto;
+		width: 400px;
+		height: 100px;
+		padding-top: 100px;
+		background-color: blue;
+		opacity: 0.9;
+		text-align:center;
+		border-radius: 50px;
+	}
+</style>
+<script>
+document.onmousemove = function()
+{
+	if (!dragging)
+		return;
+ 
+	Titanium.UI.currentWindow.setX(
+		Titanium.UI.currentWindow.getX() + event.clientX - xstart);
+	Titanium.UI.currentWindow.setY(
+		Titanium.UI.currentWindow.getY() + event.clientY - ystart);
+ 
+}
+ 
+document.onmousedown = function()
+{
+	dragging = true;
+	xstart = event.clientX;
+	ystart = event.clientY;
+}
+ 
+document.onmouseup = function()
+{
+	dragging = false;
+}
+</script>
+<head>
+	<script src="js/index.js" type="text/javascript"/>
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+<body style="background: transparent;" onload="setupDragging();">
+	<div id="container">
+		<button onclick="Titanium.UI.currentWindow.close()">Hey cool! A new window, now go the heck away.</button>
+	</div>
+</body>
+</html>

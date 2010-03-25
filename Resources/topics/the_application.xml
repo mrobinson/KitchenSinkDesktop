@@ -1,0 +1,145 @@
+<div class="module" name="The Application">
+<div class="section" name="Useful methods">
+	<p>
+	The API module also contains information about the currently-running Titanium
+	application, which may be retrieved via <tt>Titanium.API.getApplication</tt>.
+	The <tt>Application</tt> object that is returned by this method has a multitude
+	of <a href="https://developer.appcelerator.com/apidoc/desktop/1.0/Titanium.API.Application.html" target="ti:systembrowser">useful properties</a>.
+	</p>
+
+	<pre class="api_code"><code>
+		var app = Titanium.API.application;
+		alert(app.getDataPath());
+		alert(app.getGUid());
+	</code></pre>
+
+	<p>
+	The App module also contains some very useful API points for dealing
+	with the currently-running application. In particular you may wan to
+	convert an <tt>app://</tt> URL into a path.
+	</p>
+
+	<pre class="api_code"><code>
+		// The two alerts should be the same.
+		alert(Titanium.App.appURLToPath("app://images/kitten.png"));
+		alert(Titanium.Filesystem.getFile(Titanium.API.application.resourcesPath,
+			"images", "kitten.png"));
+	</code></pre>
+
+	<p>
+	One of the main benefits of the App module though is that it can
+	return values from the <tt>tiapp.xml</tt> file. This might be useful for
+	displaying the application version to the user or presenting a link to
+	your URL.
+	</p>
+
+	<pre class="api_code"><code>
+	alert("Welcome to " + Titanium.App.getName() + 
+		" " + Titanium.App.getVersion());
+	</code></pre>
+</div>
+
+<div class="section" name="Application properties">
+	<p>
+	Application properties provide a light-weight alternative to HTML5
+	databases or the Titanium Database module. They come in two varieties:
+	system properties and user properties. System properties are read-only
+	properties that are defined via the <tt>tiapp.xml</tt> file, while user properties
+	can be stored at any file path.
+	</p>
+
+	<h4>System properties</h4>
+	<p>
+	In the KitchenSink <tt>tiapp.xml</tt>, the following properties are defined
+	as children of the <tt>&lt;ti:app&gt;</tt> node:
+	</p>
+	<pre class="syntax"><code>
+		&lt;property name="myString" type="string"&gt;I am a String&lt;/property&gt;
+		&lt;property name="myDouble" type="double"&gt;1.23lt&lt;/property&gt;
+		&lt;property name="myBool" type="boolean"&gt;truelt&lt;/property&gt;
+		&lt;property name="myInt" type="int"&gt;1&lt;/property&gt;
+		&lt;property name="myList" type="list"&gt;1,2,3&lt;/property&gt;
+		&lt;property name="myDefaultString"&gt;I am a default string&lt;/property&gt;
+	</code></pre>
+
+	<p>
+	It is possible to access these properties by getting an instance of
+	the system properties object:
+	<pre class="api_code"><code>
+		var properties = Titanium.App.getSystemProperties();
+		alert(properties.getString("myString"));
+		alert(properties.getInt("myInt"));
+	</code></pre>
+	System properties are read-only, because an application may not have write
+	access to it's installation directory (where <tt>tiapp.xml</tt> resides). To
+	store properties, it's recommended that you write a user properties file to the
+	application data directory.
+	</p>
+
+	<h4>User properties</h4>
+	<p>
+	User properties have the same interface as system properties, but can be stored
+	in any file on the filesystem. Generally speaking, it's best to store these in
+	in the application data directory, which is a per-user are to store application
+	files. On Linux this is in <tt>~/.titanium/appdata/</tt>, on OS X,
+	<tt>~/Library/Application Support/Titanium/appdata</tt> and on Windows in
+	<tt>%appdata%/Titanium/appdata</tt>.
+	</p>
+
+	<p>
+	Here is an example of reading and writing to a user properties file:
+	<pre class="api_code"><code>
+		var file = Titanium.Filesystem.getFile(
+			Titanium.API.application.dataPath, "demo.properties");
+
+		// Load the file if it exists.
+		var properties = null;
+		if (file.exists())
+			properties = Titanium.App.loadProperties(file);
+
+		// If the file doesn't exist, yet just create a new properties object.
+		if (properties === null)
+			properties = Titanium.App.createProperties({
+				val1: true,
+				val2: 1.1,
+				val3: ['a', 'b', 'c'],
+				val4: "123"
+			});
+
+		// Update the properties object and save it.
+		alert(properties.getString('val4'));
+		properties.setString('val4', '321');
+		properties.saveTo(file);
+	</code></pre>
+	</p>
+</div>
+
+
+<div class="section" name="Exiting and restarting">
+	<p>
+	It is possible to exit and restart your application. This is useful
+	for creating a custom exit button. The application will also exit when
+	the last top-level window closes. It is alos possible to prevent your
+	application from exiting by listening for the <tt>EXIT</tt> event.
+	One complication with this approach is that the <tt>EXIT</tt> event is
+	fired after the last window closes, so you might need to recreate the
+	main window. A better approach is to simply catch <tt>CLOSE</tt> events.
+	</p>
+
+	<pre class="api_code"><code>
+		// Exit KitchenSink
+		Titanium.API.addEventListener(Titanium.EXIT, function(event)
+		{
+			if (!confirm("Are you sure you want to exit?"))
+				event.preventDefault();
+		});
+		Titanium.App.exit();
+	</code></pre>
+
+	<pre class="api_code"><code>
+		// Restart KitchenSink
+		Titanium.App.restart();
+	</code></pre>
+</div>
+
+</div>
