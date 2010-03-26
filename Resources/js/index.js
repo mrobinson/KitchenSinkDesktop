@@ -8,18 +8,6 @@ function Topic(doc)
 	this.doc = doc;
 	this.sections = [];
 
-	//
-	//var iterator = this.doc.evaluate(".//pre[@class='api_code']", this.doc, null,
-	//	 XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
-	//var thisNode = iterator.iterateNext();
-	//while (thisNode)
-	//{
-	//	alert(thisNode);
-	//	//thisNode.parentNode.insertBefore(thisNode, button);
-	//	thisNode.appendChild(button);
-	//	thisNode = iterator.iterateNext();
-	//}
-
 	this.html = ''
 	var iterator = this.doc.evaluate(".//div[@class='section']", this.doc, null,
 		 XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
@@ -80,7 +68,8 @@ KitchenSink.loadTopic = function(topic)
 		}
 		catch (exception)
 		{
-			alert("could not parse: " + this.children[0].innerText);
+			alert("Paser error (line: " + exception.line + "): "
+				 + this.children[0].innerText);
 		}
 		i++;
 	});
