@@ -1,0 +1,72 @@
+<div class="module" name="Menus">
+<div class="section" name="Menu Structure">
+	<p>
+		Menus are composed of two different types of objects. <tt>Titanium.UI.Menu</tt>
+		and <tt>Titanium.UI.MenuItem</tt>. A <tt>Menu</tt> is a container for
+		<tt>MenuItem</tt>s, while <tt>MenuItems</tt>s represent a single menu entry.
+		There are three types of menu items: normal menu items, check menu items and
+		separator items. A check menu item is a stateful menu item that can either be
+		on or off, while a separator item is a non-interactive item which simply inserts
+		a separator line in the menu.
+	</p>
+
+	<p>
+		Titanium menus and menu items are <em>live</em>, meaning that you can add them
+		to any number of menus and use them in any number of places and all instances
+		will update immediately. For instance, you may construct a menu object, set it
+		on the current window and the tray item, and then update the first menu item.
+		The menu item will immediately change on both the tray icon and the window.
+	</p>
+</div>
+
+<div class="section" name="Simple Menus">
+	<p>
+		Here is some code which constructs a simple menu:
+		<pre class="api_code"><code>
+			var createMenuItem = Titanium.UI.createMenuItem;
+			var createMenu = Titanium.UI.createMenu;
+
+			var makeItem = function(name)
+			{
+				var item = createMenuItem(name, function()
+				{
+					alert("Selected the '" + name + "' item");
+				});
+				return item;
+			};
+
+			var mainMenu = createMenu();
+			mainMenu.appendItem(createMenuItem("Characters"));
+			mainMenu.appendItem(createMenuItem("Plot Twists"));
+			mainMenu.appendItem(createMenuItem("Endings"));
+
+			var menu = createMenu();
+			menu.appendItem(makeItem("George, the spy"));
+			menu.appendItem(makeItem("Henriette, the scientist"));
+			menu.appendItem(makeItem("Ferdinand, the politician"));
+			mainMenu.getItemAt(0).setSubmenu(menu);
+
+			var menu = createMenu();
+			menu.appendItem(makeItem("Doublecross"));
+			menu.appendItem(makeItem("Deux ex machina"));
+			menu.appendItem(makeItem("Dinosaurs"));
+			mainMenu.getItemAt(1).setSubmenu(menu);
+
+			var menu = createMenu();
+			menu.appendItem(makeItem("Sad"));
+			menu.appendItem(makeItem("Happy"));
+			menu.appendItem(makeItem("Surreal"));
+			mainMenu.getItemAt(2).setSubmenu(menu);
+
+			Titanium.UI.currentWindow.menu = mainMenu;
+		</code></pre>
+
+		A menu can also be cleared:
+		<pre class="api_code"><code>
+			Titanium.UI.currentWindow.menu = null;
+		</code></pre>
+
+</div>
+
+
+</div>
