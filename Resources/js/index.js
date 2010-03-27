@@ -163,10 +163,9 @@ window.onload = function()
 	{
 		function resizeContentDiv()
 		{
-			document.getElementById('api_content').style.height = 
-				Titanium.UI.currentWindow.height - 50;
-			document.getElementById('api_list').style.height = 
-				Titanium.UI.currentWindow.height - 50;
+			var height = window.innerHeight - 50;
+			document.getElementById('api_content').style.height = height;
+			document.getElementById('api_list').style.height = height;
 		}
 		resizeContentDiv();
 		Titanium.UI.currentWindow.addEventListener(Titanium.RESIZED, resizeContentDiv);

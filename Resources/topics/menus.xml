@@ -54,6 +54,7 @@
 
 			var menu = createMenu();
 			menu.appendItem(makeItem("Sad"));
+			menu.addSeparatorItem();
 			menu.appendItem(makeItem("Happy"));
 			menu.appendItem(makeItem("Surreal"));
 			mainMenu.getItemAt(2).setSubmenu(menu);
@@ -65,8 +66,120 @@
 		<pre class="api_code"><code>
 			Titanium.UI.currentWindow.menu = null;
 		</code></pre>
-
+	</p>
 </div>
 
+<div class="section" name="Items with Icons">
+	<p>
+		It's pretty easy to create a menu item with an image. 
+
+		<pre class="api_code"><code>
+		var createMenuItem = Titanium.UI.createMenuItem;
+		var createMenu = Titanium.UI.createMenu;
+
+		var mainMenu = createMenu();
+		mainMenu.appendItem(createMenuItem("Characters"));
+
+		var menu = createMenu();
+		mainMenu.getItemAt(0).setSubmenu(menu);
+
+		var imageItem = createMenuItem("Swap image",
+			function()
+			{
+				if (imageItem.getIcon() == "app://images/icon1.png")
+					imageItem.setIcon("app://images/icon2.png");
+				else
+					imageItem.setIcon("app://images/icon1.png");
+			},
+			"app://images/icon1.png"
+		);
+		menu.appendItem(imageItem);
+		menu.addItem("Another item");
+		menu.addItem("Another another item");
+
+		Titanium.UI.currentWindow.setMenu(mainMenu);
+		</code></pre>
+		As you can see it's possible to set the menu image during construction
+		of the menu item or to change it later via the <tt>setIcon</tt> method.
+	</p>
+
+<div class="section" name="Check Menu Items">
+	<p>
+		Check menu items are stateful menu items which have
+		distinct 'on' and 'off' states which toggle when the
+		item is selected.
+
+		<pre class="api_code"><code>
+			var createMenu = Titanium.UI.createMenu;
+			var mainMenu = createMenu();
+			mainMenu.addItem("Characters");
+			var menu = createMenu();
+			mainMenu.getItemAt(0).setSubmenu(menu);
+
+			var checkItem = Titanium.UI.createCheckMenuItem("Check state",
+				function()
+				{
+					alert("Previous state of the item: " + checkItem.getState());
+				}
+			);
+			menu.appendItem(checkItem);
+			menu.addItem("Another item");
+			menu.addSeparatorItem();
+			menu.addItem("Another another item");
+			Titanium.UI.currentWindow.setMenu(mainMenu);
+		</code></pre>
+	</p>
+
+	<p>
+		Sometimes you need more advanced control over whether or not the
+		check should change states. There are two ways to do this. The first
+		is to use event handling:
+
+		<pre class="api_code"><code>
+			var createMenu = Titanium.UI.createMenu;
+			var mainMenu = createMenu();
+			mainMenu.addItem("Characters");
+			var menu = createMenu();
+			mainMenu.getItemAt(0).setSubmenu(menu);
+
+			var checkItem = Titanium.UI.createCheckMenuItem("Check state",
+				function(event)
+				{
+					if (!confirm("Should the item change state?"))
+						event.preventDefault();
+				}
+			);
+			menu.appendItem(checkItem);
+			menu.addItem("Another item");
+			menu.addItem("Another another item");
+			Titanium.UI.currentWindow.setMenu(mainMenu);
+		</code></pre>
+
+		Another approach is to disable auto-checking on the item. The essentially
+		means that you'll have to manage the state of the item yourself. This is
+		also useful if you'd like to turn a series of check items into radio buttons.
+
+		<pre class="api_code"><code>
+			var createMenu = Titanium.UI.createMenu;
+			var mainMenu = createMenu();
+
+			mainMenu.addItem("Characters");
+			var menu = createMenu();
+			mainMenu.getItemAt(0).setSubmenu(menu);
+			var checkItem = Titanium.UI.createCheckMenuItem("Check state",
+				function()
+				{
+					if (confirm("Should the item change state?"))
+						checkItem.setState(!checkItem.getState())
+				}
+			);
+			checkItem.setAutoCheck(false);
+			menu.appendItem(checkItem);
+			menu.addItem("Another item");
+			menu.addItem("Another another item");
+			Titanium.UI.currentWindow.setMenu(mainMenu);
+		</code></pre>
+	</p>
+</div>
 
 </div>
