@@ -1,62 +1,104 @@
 <div class="module" name="Database">
-<div class="section" name="User">
+<div class="section" name="Introduction">
 	<p>
-	Titanium allows you to fire five different types of analytics events
-	to our cloud services. The results from these events can be viewed
-	through our optional Analytics product (coming soon!).
+	There are two ways to use databases in Titanium: HTML 5 databases
+	and the database API. In some cases you access the same database
+	file with both APIs as well. Currently both APIs use SQLite backends.
+	</p>
+</div>
+
+<div class="section" name="Opening a Database">
+	<p>
+	There are two ways to open Titanim databases, <tt>Titanium.Database.open</tt>
+	and <tt>Titanium.Database.openFile</tt>. <tt>open</tt> will create (if necessarY0
+	and open a database in the same directory and schema as WebKit HTML 5 databases.
+	Use this method if you'd like to use a single database with both APIs.
+	<pre class="api_code"><code>
+		// Create a WebKit-compatible database given, the database name.
+		var db = Titanium.Database.open('mydatabase');
+	</code></pre>
 	</p>
 
 	<p>
-	User events allow you to generate simple analytics events that just
-	require an event name. You can also pass in a JSON-based data object
-	to attach to this event.",
+	You may also create a database using <tt>Titanium.Database.openFile</tt>
+	which can be given a file path or <tt>Titanium.Filesystem.File</tt> object.
+	If the database file does not exist, the method will create it and open it.
+	<pre class="api_code"><code>
+		var db = Titanium.Database.openFile(Titanium.Filesystem.getFile(
+			Titanium.Filesystem.getApplicationDataDirectory(), 'mydatabase.db'));
+	</code></pre>
+	<em>Note: It's recommended that you store all data in the application data
+	directory and not the application Resources or contents directory, as those
+	may not be writeable.</em>
+	</p>
+</div>
+
+<div class="section" name="Simple Queries">
+	<p>
+	Once a database is open you may execute simple queries on it. For instance,
+	to create a table:
+	<pre class="api_code"><code>
+		var db = Titanium.Database.openFile(Titanium.Filesystem.getFile(
+			Titanium.Filesystem.getApplicationDataDirectory(), 'mydatabase.db'));
+		db.execute("CREATE TABLE TEST (id INT, name TEXT)");
+	</code></pre>
+	<em>Note: Be sure your query is SQLite-compatible! SQLite has different data
+	types than MySQL, check them out <a href="blahblah">here</a>.</em>
 	</p>
 
+	Find a way to detect databases that already exist.
+
+	<p>
+	Inserting and retrieving data works in a very similar way:
 	<pre class="api_code"><code>
-// Fire a user event and pass along a little extra information.
-Titanium.Analytics.userEvent('my_event', {'login': true});
+		var db = Titanium.Database.openFile(Titanium.Filesystem.getFile(
+			Titanium.Filesystem.getApplicationDataDirectory(), 'mydatabase.db'));
+
+		db.execute("CREATE TABLE TEST (id INT, name TEXT)");
+		db.execute("INSERT INTO TEST VALUES(123, 'a')");
+
+		var resultSet = db.execute("SELECT * FROM TEST");
+		alert("Found " + resultSet.rowCount() + " rows");
+		while (resultSet.isValidRow())
+		{
+			var text = "";
+			for (var i = 0; i &lt; resultSet.fieldCount(); i++)
+				text += resultSet.fieldName(i) + ":"
+					 + resultSet.field(i) + " ";
+		}
 	</code></pre>
+	</p>
 </div>
 
-<div class="section" name="Navigation">
-	Navigation Events allow you to track transitions from one part of
-	your app to another.  You can pass in the from location, the to location,
-	the navigation event name, and an optional JSON data object.",
+<div class="section" name="Advanced Queries">
+	<p>
+	You should never used unescaped input in SQL queries. In these situations
+	Titanium provides a query template mechanism:
 
 	<pre class="api_code"><code>
-// pass in from location, to location, event name and a JSON data object
-Titanium.Analytics.navEvent('home', 'edit_account', 'view_account',
-	{'account_id':123});
+		var db = Titanium.Database.openFile(Titanium.Filesystem.getFile(
+			Titanium.Filesystem.getApplicationDataDirectory(), 'mydatabase.db'));
+
+		var id = confirm("Enter entry id");
+		if (!id)
+			return;
+		var value = confirm("Enter entry value");
+		if (!value)
+			return;
+
+		db.execute("CREATE TABLE TEST (id INT, name TEXT)");
+		db.execute("INSERT INTO TEST VALUES(?, ?)", id, value);
+
+		var resultSet = db.execute("SELECT * FROM TEST");
+		alert("Found " + resultSet.rowCount() + " rows");
+		while (resultSet.isValidRow())
+		{
+			var text = "";
+			for (var i = 0; i &lt; resultSet.fieldCount(); i++)
+				text += resultSet.fieldName(i) + ":"
+					 + resultSet.field(i) + " ";
+		}
 	</code></pre>
-</div>
-
-<div class="section" name="Settings">
-	Settings Events allow you track a specific setting or configuration
-	in your application.  You can pass in the settings event name and an
-	optional JSON data object
-
-	<pre class="api_code"><code>
-// pass in a setting name and a JSON data object
-Titanium.Analytics.settingsEvent('volume', {'value':5});
-	</code></pre>
-
-</div>
-
-<div class="section" name="Timed">
-	Timed Events allow you track how long an specific activity or task takes
-	to complete in your application.  You can pass in the timed event name,
-	start time, stop time, duration,  and an optional JSON data object. The
-	start time and end time values should be in miliseconds via the JavaScript
-	Date object.
-
-	<pre class="api_code"><code>
-// pass in a timed event name and a JSON data object
-var startTime = new Date();
-
-// Do some task like register for service and then do....
-var endTime = new Date();
-Titanium.Analytics.timedEvent('register', startTime, endTime, null, 
-	{'email':'bob@aol.com'});
-	</code></pre>
+	</p>
 </div>
 </div>
