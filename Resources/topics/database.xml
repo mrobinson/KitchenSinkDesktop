@@ -40,7 +40,7 @@
 	<pre class="api_code"><code>
 		var db = Titanium.Database.openFile(Titanium.Filesystem.getFile(
 			Titanium.Filesystem.getApplicationDataDirectory(), 'mydatabase.db'));
-		db.execute("CREATE TABLE TEST (id INT, name TEXT)");
+		db.execute("CREATE TABLE IF NOT EXISTS test(id INTEGER, name TEXT)");
 	</code></pre>
 	<em>Note: Be sure your query is SQLite-compatible! SQLite has different data
 	types than MySQL, check them out <a href="blahblah">here</a>.</em>
@@ -54,10 +54,10 @@
 		var db = Titanium.Database.openFile(Titanium.Filesystem.getFile(
 			Titanium.Filesystem.getApplicationDataDirectory(), 'mydatabase.db'));
 
-		db.execute("CREATE TABLE TEST (id INT, name TEXT)");
-		db.execute("INSERT INTO TEST VALUES(123, 'a')");
+		db.execute("CREATE TABLE IF NOT EXISTS test(id INTEGER, name TEXT)");
+		db.execute("INSERT INTO test VALUES(123, 'a')");
 
-		var resultSet = db.execute("SELECT * FROM TEST");
+		var resultSet = db.execute("SELECT * FROM test");
 		alert("Found " + resultSet.rowCount() + " rows");
 		while (resultSet.isValidRow())
 		{
@@ -65,6 +65,8 @@
 			for (var i = 0; i &lt; resultSet.fieldCount(); i++)
 				text += resultSet.fieldName(i) + ":"
 					 + resultSet.field(i) + " ";
+			alert(text);
+			resultSet.next();
 		}
 	</code></pre>
 	</p>
@@ -79,17 +81,17 @@
 		var db = Titanium.Database.openFile(Titanium.Filesystem.getFile(
 			Titanium.Filesystem.getApplicationDataDirectory(), 'mydatabase.db'));
 
-		var id = confirm("Enter entry id");
+		var id = prompt("Enter entry id");
 		if (!id)
 			return;
-		var value = confirm("Enter entry value");
+		var value = prompt("Enter entry value");
 		if (!value)
 			return;
 
-		db.execute("CREATE TABLE TEST (id INT, name TEXT)");
-		db.execute("INSERT INTO TEST VALUES(?, ?)", id, value);
+		db.execute("CREATE TABLE IF NOT EXISTS test(id INTEGER, name TEXT)");
+		db.execute("INSERT INTO test VALUES(?, ?)", id, value);
 
-		var resultSet = db.execute("SELECT * FROM TEST");
+		var resultSet = db.execute("SELECT * FROM test");
 		alert("Found " + resultSet.rowCount() + " rows");
 		while (resultSet.isValidRow())
 		{
@@ -97,6 +99,8 @@
 			for (var i = 0; i &lt; resultSet.fieldCount(); i++)
 				text += resultSet.fieldName(i) + ":"
 					 + resultSet.field(i) + " ";
+			alert(text);
+			resultSet.next();
 		}
 	</code></pre>
 	</p>
